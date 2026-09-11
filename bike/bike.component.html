@@ -1,0 +1,44 @@
+<div class="bikes-page">
+
+  <div class="top-section">
+    <h1>Premium Bikes</h1>
+    <p>Choose from premium superbikes, cruisers, sports bikes and daily commuters.</p>
+  </div>
+
+  <div class="bikes-grid">
+
+    <div class="bike-card" *ngFor="let bike of bikes">
+
+      <img
+        [src]="bike.image"
+        [alt]="bike.model">
+
+      <div class="card-content">
+
+        <h2>{{bike.brand}} {{bike.model}}</h2>
+
+        <p>{{bike.description}}</p>
+
+        <div class="features">
+          <span>{{bike.engineCC}} CC</span>
+          <span>{{bike.fuelType}}</span>
+          <span>{{bike.transmission}}</span>
+        </div>
+
+        <div class="price-row">
+
+          <h3>₹{{bike.pricePerDay}}/day</h3>
+
+          <button (click)="bookNow(bike)">
+            Book Now
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

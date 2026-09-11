@@ -1,0 +1,411 @@
+
+<div class="admin-page">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+
+    <div class="logo">
+      <h2>Rentigo</h2>
+      <span>Admin Panel</span>
+    </div>
+
+    <ul>
+      
+      <li routerLink="/admin-dashboard">Dashboard</li>
+      <li routerLink="/admin-cars">Cars</li>
+      <li routerLink="/admin-bookings">Bookings</li>
+      <li routerLink="/admin-users">Users</li>
+      <li routerLink="/admin-payments">Payments</li>
+      <li routerLink="/admin-settings">Settings</li>
+      <li routerLink="/admin-feedback">
+  Feedback
+</li>
+
+      <li
+        onclick="window.location.href='/'"
+        class="logout-btn">
+        Logout
+      </li>
+    </ul>
+
+  </div>
+
+  <div class="toast-container">
+
+  <div
+    class="toast"
+    *ngFor="let toast of toasts">
+
+    🔔 {{ toast }}
+
+  </div>
+
+</div>
+
+
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+
+      <div>
+        <h1>Admin Dashboard</h1>
+        <p>
+          Manage bookings, cars, users and revenue from one place.
+        </p>
+      </div>
+
+      <div class="top-actions">
+
+        <div
+          class="notification-bell"
+         (click)="toggleNotifications()">
+          🔔
+
+          <span
+            class="notification-count"
+            *ngIf="unreadCount > 0">
+
+            {{ unreadCount }}
+
+          </span>
+         </div>
+
+         <button
+    class="pdf-btn"
+    (click)="exportDashboardPDF()">
+
+    Export PDF
+
+  </button>
+
+        <button
+          routerLink="/admin-add-car"
+          class="add-btn">
+
+          Add New Car
+</button>
+        
+
+
+
+      </div>
+
+    </div>
+
+    <!-- NOTIFICATION DROPDOWN -->
+    <div
+      class="notification-dropdown"
+      *ngIf="showNotifications">
+
+      <h3>Notifications</h3>
+
+<button
+    class="clear-btn"
+    (click)="clearNotifications()">
+    Clear All
+  </button>
+
+      <div
+        *ngFor="let n of notifications"
+        class="notification-item">
+
+        🔔 {{ n }}
+
+      </div>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <h2>{{ totalCars }}</h2>
+        <p>Total Cars</p>
+      </div>
+
+      <div class="stat-card">
+        <h2>{{ totalBookings }}</h2>
+        <p>Total Bookings</p>
+      </div>
+
+      <div class="stat-card">
+        <h2>{{ totalUsers }}</h2>
+        <p>Total Users</p>
+      </div>
+
+      <div class="stat-card">
+        <h2>₹{{ totalRevenue }}</h2>
+        <p>Total Revenue</p>
+      </div>
+
+      <div class="stat-card">
+        <h2>{{ pendingBookings }}</h2>
+        <p>Pending Bookings</p>
+      </div>
+
+      <div class="stat-card">
+        <h2>{{ confirmedBookings }}</h2>
+        <p>Confirmed Bookings</p>
+      </div>
+
+      <div class="stat-card">
+        <h2>{{ cancelledBookings }}</h2>
+        <p>Cancelled Bookings</p>
+      </div>
+
+      <div class="stat-card">
+  <h2>{{ totalBookings }}</h2>
+  <p>Today's Bookings</p>
+</div>
+
+      <div class="stat-card">
+        <h2>{{ totalCars }}</h2>
+        <p>Fleet Size</p>
+      </div>
+
+      <div class="stat-card growth-card">
+
+  <h2>{{ revenueGrowth }}%</h2>
+
+  <p>Revenue Growth</p>
+
+  <small>
+    ₹{{ currentRevenue }}
+    vs
+    ₹{{ lastRevenue }}
+  </small>
+
+</div>
+
+    </div>
+
+    <!-- RECENT BOOKINGS -->
+    <div class="table-section">
+
+      <div class="table-header">
+
+        <h2>Recent Bookings</h2>
+
+        <button class="view-btn">
+          View All
+        </button>
+
+      </div>
+      
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Car</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let booking of recentBookings">
+
+            <td>{{ booking.customerName }}</td>
+
+            <td>{{ booking.vehicleNumber }}</td>
+
+            <td>{{ booking.startDate | date:'dd MMM yyyy' }}</td>
+
+            <td>
+              <span
+                [ngClass]="{
+                  'success': booking.bookingStatus === 'Confirmed',
+                  'pending': booking.bookingStatus === 'Pending',
+                  'cancelled': booking.bookingStatus === 'Cancelled'
+                }">
+
+                {{ booking.bookingStatus }}
+
+              </span>
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+    <!-- REVENUE -->
+    <div class="table-section">
+
+      <div class="table-header">
+        <h2>Revenue Analytics</h2>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="revenueChart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- BOOKING STATUS -->
+    <div class="table-section">
+
+      <div class="table-header">
+        <h2>Booking Status Analytics</h2>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="bookingStatusChart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- TOP RENTED CARS -->
+    <div class="table-section">
+
+      <div class="table-header">
+        <h2>Top Rented Cars</h2>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="topCarsChart"></canvas>
+      </div>
+
+    </div>
+    <div class="table-section">
+
+  <div class="table-header">
+    <h2>Top Customers</h2>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="topCustomersChart"></canvas>
+  </div>
+
+</div>
+<div class="table-section">
+
+  <div class="table-header">
+    <h2>Most Profitable Cars</h2>
+  </div>
+
+  <div class="chart-container">
+    <canvas id="mostProfitableCarsChart"></canvas>
+  </div>
+
+</div>
+
+    <!-- REVENUE TREND -->
+    <div class="table-section">
+
+      <div class="table-header">
+        <h2>Revenue Trend</h2>
+      </div>
+
+      <div class="chart-container">
+        <canvas id="trendChart"></canvas>
+      </div>
+
+    </div>
+
+    <!-- RECENT ACTIVITY -->
+    <div class="table-section">
+
+    
+  <div class="table-header">
+    <h2>Recent Activity</h2>
+  </div>
+
+  <div
+    class="activity-item"
+    *ngFor="let activity of activities">
+
+    <p>{{ activity.message }}</p>
+
+    <small>
+      {{ activity.date | date:'dd MMM yyyy' }}
+    </small>
+
+  </div>
+</div>
+
+
+<!-- TODAY BOOKINGS CARD -->
+
+
+
+<!-- RECENT PAYMENTS -->
+
+<div class="table-section">
+
+  <div class="table-header">
+    <h2>Recent Payments</h2>
+  </div>
+
+  
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Amount</th>
+        <th>Method</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let p of recentPayments">
+
+        <td>{{ p.paymentID }}</td>
+
+        <td>₹{{ p.amount }}</td>
+
+        <td>{{ p.paymentMethod }}</td>
+
+        <td>{{ p.paymentStatus }}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+<div class="table-section">
+
+  <div class="table-header">
+    <h2>High Demand Cars</h2>
+  </div>
+
+  <table>
+
+    <thead>
+      <tr>
+        <th>Vehicle</th>
+        <th>Active Bookings</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      <tr *ngFor="let car of lowAvailabilityCars">
+
+        <td>{{ car.vehicleNumber }}</td>
+
+        <td>{{ car.activeBookings }}</td>
+
+      </tr>
+
+    </tbody>
+
+  </table>
+
+</div>
+
+</div>
+</div>

@@ -1,0 +1,462 @@
+<div class="booking-page">
+
+  <!-- HEADER -->
+
+  <div class="booking-header">
+
+    <span class="tag">Premium Car Rental Service</span>
+
+    <h1>
+      Book Your Dream Car With
+      <span>Rentigo</span>
+    </h1>
+
+    <p>
+      Luxury cars for weddings, business trips and unforgettable journeys.
+    </p>
+
+  </div>
+
+  <!-- MAIN -->
+
+  <div class="booking-container">
+
+    <!-- LEFT -->
+
+    <div class="left-side">
+
+      <img
+        [src]="carImage ? carImage : 'https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=1200'"
+        alt="Car">
+
+      <div class="car-details">
+
+        <h2>{{selectedCar?.model?.name}}</h2>
+
+        <div class="rating-row">
+<span class="rating">
+⭐ {{selectedCar?.rating | number:'1.1-1'}}
+</span>
+<span class="review-count">
+{{selectedCar?.reviewCount}} Reviews
+</span>
+          
+
+        </div>
+<p class="description">
+{{selectedCar?.description || selectedCar?.review}}
+</p>
+
+        <div class="features">
+
+          <span class="feature-pill">
+            ⚙ {{selectedCar?.transmission}}
+          </span>
+
+          <span class="feature-pill">
+            ⛽ {{selectedCar?.model?.fuelType}}
+          </span>
+
+          <span class="feature-pill">
+            👥 {{selectedCar?.model?.seatingCapacity}} Seats
+          </span>
+
+          <span
+            class="feature-pill"
+            *ngIf="selectedCar?.color">
+
+            🎨 {{selectedCar?.color}}
+
+          </span>
+
+          <span
+            class="feature-pill"
+            *ngIf="selectedCar?.status">
+
+            ✔ {{selectedCar?.status}}
+
+          </span>
+
+        </div>
+
+        <div class="price-box">
+
+          <div>
+
+            <p class="price-title">
+              Rental Price
+            </p>
+
+            <h3>
+              ₹{{selectedCar?.pricePerDay}}
+            </h3>
+
+            <small>
+              Per Day
+            </small>
+
+          </div>
+<div class="availability available"
+
+*ngIf="selectedCar?.status=='Available'">
+
+🟢 Available Today
+
+</div>
+
+<div class="availability booked"
+
+*ngIf="selectedCar?.status=='Booked'">
+
+🔴 Currently Booked
+
+</div>
+          <button
+            class="wishlist-btn"
+            type="button">
+
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314"/>
+</svg>
+          </button>
+
+        </div>
+
+      </div>
+      <div class="review-section">
+
+<h3>Customer Reviews</h3>
+
+<div
+class="review-card"
+*ngFor="let review of selectedCar?.reviews">
+
+<div>
+
+⭐ {{review.rating}} / 5
+
+</div>
+
+<p>
+
+{{review.comment}}
+
+</p>
+
+<small>
+
+{{review.createdAt | date}}
+
+</small>
+
+</div>
+
+</div>
+
+    </div>
+
+    <!-- RIGHT --><div class="right-side">
+
+  <h2>Booking Form</h2>
+
+  <div class="stepper">
+
+    <div
+      class="step"
+      [class.active]="currentStep==1">
+
+      1. Personal Details
+
+    </div>
+
+    <div
+      class="step"
+      [class.active]="currentStep==2">
+
+      2. Trip Details
+
+    </div>
+
+  </div>
+
+  <form #bookingForm="ngForm">
+
+  <!-- STEP 1 -->
+
+  <div *ngIf="currentStep==1">
+
+    <!-- Full Name -->
+
+    <div class="input-box">
+
+      <label>Full Name</label>
+
+      <input
+        type="text"
+        name="name"
+        ngModel
+        #fullNameModel="ngModel"
+        required
+        placeholder="Enter Full Name">
+
+      <p
+        class="error-text"
+        *ngIf="fullNameModel.invalid && fullNameModel.touched">
+
+        Name is required
+
+      </p>
+
+    </div>
+
+    <!-- Email -->
+
+    <div class="input-box">
+
+      <label>Email Address</label>
+
+      <input
+        type="email"
+        name="email"
+        ngModel
+        #emailModel="ngModel"
+        required
+        pattern="[a-zA-Z0-9._%+-]+@gmail.com"
+        placeholder="Enter Email">
+
+      <p
+        class="error-text"
+        *ngIf="emailModel.invalid && emailModel.touched">
+
+        Enter valid Gmail
+
+      </p>
+
+    </div>
+
+    <!-- Phone -->
+
+    <div class="input-box">
+
+      <label>Phone Number</label>
+
+      <input
+        type="text"
+        name="phone"
+        ngModel
+        #phoneModel="ngModel"
+        required
+        maxlength="10"
+        pattern="[0-9]{10}"
+        placeholder="Enter Phone Number">
+
+      <p
+        class="error-text"
+        *ngIf="phoneModel.invalid && phoneModel.touched">
+
+        Enter valid phone number
+
+      </p>
+
+    </div>
+
+    <!-- Next Button -->
+
+    <button
+      type="button"
+      class="next-btn"
+      (click)="nextStep()"
+      [disabled]="fullNameModel.invalid || emailModel.invalid || phoneModel.invalid">
+
+      Next →
+
+    </button>
+
+  </div>
+
+  <!-- STEP 2 -->
+
+<div *ngIf="currentStep==2">
+
+  <div class="input-box">
+
+    <label>Selected Car</label>
+
+    <input
+      [value]="selectedCar?.model?.name"
+      readonly>
+
+  </div>
+
+  <div class="double-input">
+
+    <div class="input-box">
+
+      <label>Pickup Date</label>
+
+      <input
+        type="date"
+        name="pickupDate"
+        ngModel
+        #pickupDate="ngModel"
+        required>
+
+    </div>
+
+    <div class="input-box">
+
+      <label>Return Date</label>
+
+      <input
+        type="date"
+        name="returnDate"
+        ngModel
+        #returnDate="ngModel"
+        required>
+
+    </div>
+
+  </div>
+
+  <div class="input-box">
+
+    <label>Pickup Location</label>
+
+    <input
+      type="text"
+      name="location"
+      ngModel
+      #locationModel="ngModel"
+      required
+      placeholder="Pickup Location">
+
+    <p
+      class="error-text"
+      *ngIf="locationModel.invalid && locationModel.touched">
+
+      Pickup Location is required
+
+    </p>
+
+  </div>
+
+  <div class="input-box">
+
+    <label>Payment Method</label>
+
+    <select
+      name="payment"
+      ngModel
+      #paymentModel="ngModel"
+      required>
+
+      <option value="">Select Payment</option>
+
+      <option>UPI</option>
+      <option>Credit Card</option>
+      <option>Debit Card</option>
+      <option>Cash</option>
+
+    </select>
+
+  </div>
+
+  <div class="booking-summary">
+
+    <h3>Booking Summary</h3>
+
+    <div class="summary-row">
+
+      <span>Car</span>
+
+      <span>{{selectedCar?.model?.name}}</span>
+
+    </div>
+
+    <div class="summary-row">
+
+      <span>Price / Day</span>
+
+      <span>₹{{selectedCar?.pricePerDay}}</span>
+
+    </div>
+
+    <div class="summary-row">
+
+      <span>Security Deposit</span>
+
+      <span>₹5000</span>
+
+    </div>
+
+  </div>
+
+  <div class="button-group">
+
+    <button
+      type="button"
+      class="back-btn"
+      (click)="previousStep()">
+
+      ← Back
+
+    </button>
+
+    <button
+      type="button"
+      class="confirm-btn"
+      [disabled]="locationModel.invalid || paymentModel.invalid || pickupDate.invalid || returnDate.invalid"
+      (click)="bookNow(
+        bookingForm.value.name,
+        bookingForm.value.email,
+        bookingForm.value.phone,
+        bookingForm.value.location
+      )">
+
+      Confirm Booking
+
+    </button>
+
+  </div>
+
+  <p class="success-text">
+
+    {{successMessage}}
+
+  </p>
+
+</div>
+
+</form>
+
+</div>
+
+    </div>
+
+
+  <!-- STATS -->
+
+  <div class="service-section">
+
+    <div class="service-card">
+      <h2>500+</h2>
+      <p>Luxury Cars</p>
+    </div>
+
+    <div class="service-card">
+      <h2>24/7</h2>
+      <p>Customer Support</p>
+    </div>
+
+    <div class="service-card">
+      <h2>10K+</h2>
+      <p>Happy Customers</p>
+    </div>
+
+    <div class="service-card">
+      <h2>100%</h2>
+      <p>Secure Booking</p>
+    </div>
+
+  </div>
+

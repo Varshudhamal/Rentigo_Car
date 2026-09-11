@@ -1,0 +1,65 @@
+<div class="add-car-page">
+
+  <h1>Add New Car</h1>
+
+<form #carForm="ngForm" (ngSubmit)="addCar(
+  carName.value,
+  brand.value,
+  price.value,
+  location.value,
+  image.value
+)">
+    <input
+  type="text"
+  placeholder="Car Name"
+  name="carName"
+  #carName="ngModel"
+  ngModel
+  required
+>
+    <input
+  type="text"
+  placeholder="Brand"
+  name="brand"
+  #brand="ngModel"
+  ngModel
+  required
+>
+
+   <input
+  type="text"
+  placeholder="Price Per Day"
+  name="price"
+  #price="ngModel"
+  ngModel
+  required
+>
+
+    <input
+  type="text"
+  placeholder="Location"
+  name="location"
+  #location="ngModel"
+  ngModel
+  required
+>
+
+    <input
+  type="text"
+  placeholder="Image URL"
+  name="image"
+  #image="ngModel"
+  ngModel
+  required
+>
+
+   <button type="submit">
+  Add Car
+</button>
+
+<p class="success-msg">
+  {{successMessage}}
+</p>
+  </form>
+
+</div>

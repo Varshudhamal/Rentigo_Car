@@ -1,0 +1,30 @@
+nav{
+  background:#111;
+  padding:20px 40px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  z-index:99999 !important;
+  width:100%;
+}
+
+nav div{
+  display:flex;
+  gap:20px;
+}
+
+a{
+  color:white;
+  text-decoration:none;
+  cursor:pointer;
+  font-size:17px;
+}
+
+a:hover{
+  color:orange;
+}
+
+h2{
+  color:white;
+}

@@ -1,0 +1,56 @@
+<div class="cars-page">
+
+  <div class="top-section">
+    <h1>Explore Our Luxury Cars</h1>
+
+    <p>
+      Premium cars for every journey — luxury, sports, SUV & comfort.
+    </p>
+  </div>
+
+  <div class="cars-grid">
+
+    <!-- BMW -->
+   <div class="car-card" *ngFor="let car of cars">
+
+  <img
+    [src]="car.image"
+    [alt]="car.vehicleNumber"
+    class="car-image"
+  />
+
+  <div class="card-content">
+
+    <h2>{{car.model}}</h2>
+
+    <p>
+      {{car.description}}
+    </p>
+
+    <div class="features">
+      <div class="features">
+    <span>{{car.transmission}}</span>
+    <span>{{car.fuelType}}</span>
+    <span>{{car.seatingCapacity}} Seats</span>
+</div>
+    </div>
+
+    <div class="price-row">
+
+      <h3>₹{{car.pricePerDay}}/day</h3>
+
+     <button
+class="book-btn"
+(click)="bookNow(car)">
+Book Now
+</button>
+    </div>
+
+  </div>
+
+</div>
+
+
+</div>
+  </div>
+

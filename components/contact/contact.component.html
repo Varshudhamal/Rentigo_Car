@@ -1,0 +1,253 @@
+<div class="contact-page">
+
+  <!-- HEADER -->
+
+  <div class="contact-header">
+
+    <span class="tag">
+      Contact Rentigo
+    </span>
+
+    <h1>
+      Get In Touch With
+      <span>Rentigo</span>
+    </h1>
+
+    <p>
+      Have questions about bookings, pricing or luxury cars?
+      Our team is always ready to help you.
+    </p>
+
+  </div>
+
+  <!-- MAIN SECTION -->
+
+  <div class="contact-container">
+
+    <!-- LEFT SIDE -->
+
+    <div class="contact-info">
+
+      <div class="info-card">
+
+        <div class="icon">
+          📍
+        </div>
+
+        <div>
+          <h2>Our Location</h2>
+          <p>Kolhapur, Maharashtra, India</p>
+        </div>
+
+      </div>
+
+      <div class="info-card">
+
+        <div class="icon">
+          📞
+        </div>
+
+        <div>
+          <h2>Phone Number</h2>
+          <p>+91 9876543210</p>
+        </div>
+
+      </div>
+
+      <div class="info-card">
+
+        <div class="icon">
+          ✉️
+        </div>
+
+        <div>
+          <h2>Email Address</h2>
+<p>support&#64;rentigo.com</p>        </div>
+
+      </div>
+
+      <div class="info-card">
+
+        <div class="icon">
+          ⏰
+        </div>
+
+        <div>
+          <h2>Working Hours</h2>
+          <p>24/7 Premium Support</p>
+        </div>
+
+      </div>
+
+      <img
+        src="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=1600"
+        alt="Luxury Car"
+      >
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+
+    <div class="contact-form">
+
+      <h2>Send Message</h2>
+
+<form #contactForm="ngForm">
+       <div class="input-box">
+
+    <label>Full Name</label>
+
+    <input
+      type="text"
+      placeholder="Enter your full name"
+      #name="ngModel"
+      name="name"
+      ngModel
+      required
+      minlength="3"
+    >
+
+    <small
+      class="error"
+      *ngIf="name.invalid && name.touched"
+    >
+      Enter valid name
+    </small>
+
+  </div>
+
+
+
+        <div class="input-box">
+
+    <label>Email Address</label>
+
+    <input
+      type="email"
+      placeholder="Enter your email"
+      #email="ngModel"
+      name="email"
+      ngModel
+      required
+      pattern="[a-z0-9._%+-]+@gmail\.com$"
+    >
+
+    <small
+      class="error"
+      *ngIf="email.invalid && email.touched"
+    >
+      Enter valid Gmail address
+    </small>
+
+  </div>
+
+
+
+        <div class="input-box">
+
+    <label>Subject</label>
+
+    <input
+      type="text"
+      placeholder="Enter subject"
+      #subject="ngModel"
+      name="subject"
+      ngModel
+      required
+    >
+
+    <small
+      class="error"
+      *ngIf="subject.invalid && subject.touched"
+    >
+      Subject is required
+    </small>
+
+  </div>
+  <div class="input-box">
+
+  <label>Address</label>
+
+  <input
+    type="text"
+    placeholder="Enter address"
+    #address="ngModel"
+    name="address"
+    ngModel
+    required
+  >
+
+</div>
+
+<div class="input-box">
+
+  <label>Message</label>
+
+  <textarea
+    placeholder="Enter your message"
+    #message="ngModel"
+    name="message"
+    ngModel
+    required
+  ></textarea>
+
+</div>
+ <button
+    type="button"
+    [disabled]="contactForm.invalid"
+    (click)="sendMessage(
+      name.value,
+      email.value,
+      address.value,
+      subject.value,
+      message.value
+    )"
+  >
+    Send Message
+  </button>
+
+  <p class="success-msg">
+    {{successMessage}}
+  </p>
+
+
+ 
+
+
+
+        
+
+      
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- EXTRA SECTION -->
+
+  <div class="support-section">
+
+    <div class="support-card">
+      <h2>24/7</h2>
+      <p>Customer Support</p>
+    </div>
+
+    <div class="support-card">
+      <h2>500+</h2>
+      <p>Luxury Cars</p>
+    </div>
+
+    <div class="support-card">
+      <h2>10K+</h2>
+      <p>Happy Customers</p>
+    </div>
+
+    <div class="support-card">
+      <h2>100%</h2>
+      <p>Secure Service</p>
+    </div>
+
+  </div>
+
+</div>

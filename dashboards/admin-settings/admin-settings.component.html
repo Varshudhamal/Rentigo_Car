@@ -1,0 +1,125 @@
+<div class="admin-settings-page">
+
+  <!-- TOP BAR -->
+
+  <div class="top-bar">
+
+    <div>
+      <h1>Settings</h1>
+      <p>Manage Rentigo admin preferences & system settings</p>
+    </div>
+
+  </div>
+
+  <!-- SETTINGS CARDS -->
+
+  <div class="settings-grid">
+
+    <!-- PROFILE -->
+
+    <div class="settings-card">
+
+      <h2>Admin Profile</h2>
+
+      <input
+        type="text"
+        placeholder="Admin Name"
+      >
+
+      <input
+        type="email"
+        placeholder="Admin Email"
+      >
+
+      <input
+        type="text"
+        placeholder="Phone Number"
+      >
+
+    </div>
+
+    <!-- SECURITY -->
+
+    <div class="settings-card">
+
+      <h2>Security</h2>
+
+      <input
+        type="password"
+        placeholder="Current Password"
+      >
+
+      <input
+        type="password"
+        placeholder="New Password"
+      >
+
+      <input
+        type="password"
+        placeholder="Confirm Password"
+      >
+
+    </div>
+
+    <!-- COMPANY -->
+
+    <div class="settings-card">
+
+      <h2>Company Details</h2>
+
+      <input
+        type="text"
+        placeholder="Company Name"
+      >
+
+      <input
+        type="text"
+        placeholder="Support Email"
+      >
+
+      <input
+        type="text"
+        placeholder="Office Location"
+      >
+
+    </div>
+
+    <!-- NOTIFICATIONS -->
+
+    <div class="settings-card">
+
+      <h2>Notifications</h2>
+
+      <div class="toggle-row">
+        <span>Email Notifications</span>
+        <input type="checkbox" checked>
+      </div>
+
+      <div class="toggle-row">
+        <span>Booking Alerts</span>
+        <input type="checkbox" checked>
+      </div>
+
+      <div class="toggle-row">
+        <span>Payment Updates</span>
+        <input type="checkbox">
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- SAVE BUTTON -->
+
+  <button
+    class="save-btn"
+    (click)="saveSettings()"
+  >
+    Save Settings
+  </button>
+
+  <p class="success-msg">
+    {{successMessage}}
+  </p>
+
+</div>

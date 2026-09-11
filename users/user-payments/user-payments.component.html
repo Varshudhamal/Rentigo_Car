@@ -1,0 +1,102 @@
+<div class="payment-container">
+
+  <h2>Payment Details</h2>
+
+  <div class="booking-card">
+    <h3>Booking Summary</h3>
+
+    <p><strong>Car:</strong> BMW X5</p>
+    <p><strong>Pickup:</strong> Pune</p>
+    <p><strong>Return:</strong> Mumbai</p>
+    <p><strong>Days:</strong> 2</p>
+  </div>
+
+  <div class="payment-method">
+
+    <h3>Select Payment Method</h3>
+
+    <label>
+      <input type="radio" name="payment">
+      Credit Card
+    </label>
+
+    <label>
+      <input type="radio" name="payment">
+      Debit Card
+    </label>
+
+    <label>
+      <input type="radio" name="payment">
+      UPI
+    </label>
+
+    <label>
+      <input type="radio" name="payment">
+      Net Banking
+    </label>
+
+  </div>
+
+  <div class="price-card">
+
+    <h3>Price Details</h3>
+
+    <div>
+      <span>Rent Amount</span>
+      <span>₹5000</span>
+    </div>
+
+    <div>
+      <span>Taxes</span>
+      <span>₹500</span>
+    </div>
+
+    <div>
+      <span>Security Deposit</span>
+      <span>₹1000</span>
+    </div>
+
+    <hr>
+
+    <div class="total">
+      <span>Total</span>
+      <span>₹6500</span>
+    </div>
+
+  </div>
+
+<button
+  class="pay-btn"
+  *ngIf="!paymentDone"
+  (click)="payNow()">
+  Pay Now
+</button>
+
+<div class="success-card" *ngIf="paymentDone">
+
+  <div class="success-icon">
+    ✓
+  </div>
+
+  <h2>Payment Successful!</h2>
+
+  <p>Your booking has been confirmed.</p>
+
+  <p><strong>Booking ID:</strong> BK1025</p>
+
+  <div class="success-buttons">
+
+   <button
+  class="view-btn"
+  (click)="viewBooking()">
+  View Booking
+</button>
+
+<button
+  class="receipt-btn"
+  (click)="downloadReceipt()">
+  Download Receipt
+</button>
+  </div>
+
+</div>

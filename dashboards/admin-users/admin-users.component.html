@@ -1,0 +1,134 @@
+<div class="admin-users-page">
+
+  <!-- TOP BAR -->
+
+  <div class="top-bar">
+
+    <div>
+      <h1>Users Management</h1>
+      <p>Manage all registered Rentigo users</p>
+    </div>
+
+  <button
+  class="add-btn"
+  onclick="window.location.href='/admin-add-user'"
+>
+  + Add New User
+</button>
+  </div>
+
+  <!-- STATS -->
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <h2>5,245</h2>
+      <p>Total Users</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>1080</h2>
+      <p>Active Users</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>180</h2>
+      <p>Premium Members</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>185</h2>
+      <p>New This Month</p>
+    </div>
+
+  </div>
+
+  <!-- TABLE -->
+
+  <div class="table-section">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>User</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>City</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+
+      </thead>
+<tbody>
+
+<tr *ngFor="let user of users">
+
+  <td>{{user.name}}</td>
+  <td>{{user.email}}</td>
+  <td>{{user.phone}}</td>
+  <td>{{user.city}}</td>
+
+  <td>
+    <span>{{user.status}}</span>
+  </td>
+
+  <td>
+
+    <button
+      class="edit-btn"
+      (click)="openEditUserModal(content, user)">
+
+      <span class="material-symbols-outlined">
+        edit
+      </span>
+
+    </button>
+
+ <button
+  class="delete-btn"
+    onclick="if(confirm('Are you sure you want to delete this user?')) { alert('User Deleted Successfully'); this.closest('tr').remove(); }">
+
+   <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+
+  </td>
+
+</tr>
+
+</tbody>
+</table>
+
+    <ng-template #content let-modal>
+
+  <div class="modal-header">
+    <h5>Edit User</h5>
+  </div>
+
+  <div class="modal-body">
+
+    <input
+      class="form-control"
+      [(ngModel)]="selectedUser.name">
+
+  </div>
+
+  <div class="modal-footer">
+
+    <button
+      class="btn btn-success"
+      (click)="saveUserChanges(); modal.close()">
+
+      Save
+
+    </button>
+
+  </div>
+
+</ng-template>
+  </div>
+
+</div>

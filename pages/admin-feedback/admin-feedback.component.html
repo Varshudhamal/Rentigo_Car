@@ -1,0 +1,21 @@
+<div class="feedback-page">
+
+  <h1>Customer Feedback</h1>
+
+  <div
+    class="feedback-card"
+    *ngFor="let f of feedbacks">
+
+    <div class="rating">
+      ⭐ {{ f.rating }}/5
+    </div>
+
+    <p>{{ f.comment }}</p>
+
+    <small>
+      {{ f.createdAt | date:'dd MMM yyyy' }}
+    </small>
+
+  </div>
+
+</div>

@@ -1,0 +1,1319 @@
+<div class="admin-bookings-page">
+
+  <!-- ================= TOP BAR ================= -->
+
+  <div class="top-bar">
+
+    <div class="page-title">
+
+      <h1>Bookings Management</h1>
+
+      <p>Track all customer car bookings</p>
+
+    </div>
+
+  </div>
+
+  <!-- ================= TOOLBAR ================= -->
+
+  <div class="booking-toolbar">
+
+    <div class="search-box">
+
+      <input type="text" placeholder="🔍Search by customer, car or location..." [(ngModel)]="searchText"
+        (input)="filterBookings()">
+
+
+    </div>
+
+    <div class="filter-box">
+
+      <select [(ngModel)]="selectedStatus" (change)="filterBookings()">
+
+        <option value="All">All Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Confirmed">Confirmed</option>
+        <option value="Completed">Completed</option>
+        <option value="Cancelled">Cancelled</option>
+
+      </select>
+
+    </div>
+
+    <button class="export-btn" (click)="exportBookings()">
+
+      Export Excel
+
+    </button>
+
+  </div>
+
+  <!-- ================= STATS ================= -->
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+
+      <h2>{{totalBookings}}</h2>
+
+      <p>Total Bookings</p>
+
+    </div>
+
+    <div class="stat-card">
+
+      <h2>{{completedBookings}}</h2>
+
+      <p>Completed</p>
+
+    </div>
+
+    <div class="stat-card">
+
+      <h2>{{pendingBookings}}</h2>
+
+      <p>Pending</p>
+
+    </div>
+
+    <div class="stat-card">
+
+      <h2>{{cancelledBookings}}</h2>
+
+      <p>Cancelled</p>
+
+    </div>
+
+  </div>
+
+  <!-- ================= LOADER ================= -->
+
+  <div class="loader" *ngIf="loading">
+
+    <div class="spinner"></div>
+
+    <p>Loading bookings...</p>
+
+  </div>
+
+  <!-- ================= BOOKINGS TABLE ================= -->
+
+  <div class="table-section" *ngIf="!loading">
+
+    <table>
+
+      <thead>
+
+        <tr>
+
+          <th (click)="sort('customerName')" class="sortable">
+            Customer
+            <span *ngIf="sortColumn=='customerName'">
+              {{ sortDirection ? '▲' : '▼' }}
+            </span>
+          </th>
+
+          <th (click)="sort('vehicleNumber')" class="sortable">
+            Car
+            <span *ngIf="sortColumn=='vehicleNumber'">
+              {{ sortDirection ? '▲' : '▼' }}
+            </span>
+          </th>
+
+          <th (click)="sort('startDate')" class="sortable">
+            Pickup
+            <span *ngIf="sortColumn=='startDate'">
+              {{ sortDirection ? '▲' : '▼' }}
+            </span>
+          </th>
+
+          <th (click)="sort('endDate')" class="sortable">
+            Return
+            <span *ngIf="sortColumn=='endDate'">
+              {{ sortDirection ? '▲' : '▼' }}
+            </span>
+          </th>
+
+          <th>Total</th>
+
+          <th (click)="sort('bookingStatus')" class="sortable">
+            Status
+            <span *ngIf="sortColumn=='bookingStatus'">
+              {{ sortDirection ? '▲' : '▼' }}
+            </span>
+          </th>
+
+          <th>Refund</th>
+
+          <th>Actions</th>
+
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr *ngFor="let booking of filteredBookings">
+
+          <td>{{ booking.customerName }}</td>
+
+          <td>{{ booking.vehicleNumber }}</td>
+
+          <td>{{ booking.startDate | date:'dd MMM yyyy' }}</td>
+
+          <td>{{ booking.endDate | date:'dd MMM yyyy' }}</td>
+
+          <td>
+
+            ₹{{ booking.totalAmount }}
+
+          </td>
+
+          <td>
+
+            <span [ngClass]="{
+
+            'pending': booking.bookingStatus=='Pending',
+
+            'confirmed': booking.bookingStatus=='Confirmed',
+
+            'completed': booking.bookingStatus=='Completed',
+
+            'cancelled': booking.bookingStatus=='Cancelled'
+
+          }">
+
+              {{ booking.bookingStatus }}
+
+            </span>
+
+          </td>
+
+          <td>
+
+            <span [ngClass]="{
+
+            'refund-pending': booking.refundStatus=='Pending',
+
+            'refund-success': booking.refundStatus=='Refunded',
+
+            'refund-none': booking.refundStatus=='Not Required'
+
+          }">
+
+              {{ booking.refundStatus }}
+
+            </span>
+
+          </td>
+
+          <td class="action-buttons">
+
+            <button class="view-btn" (click)="viewBooking(booking)">
+              View
+            </button>
+
+            <button class="approve-btn" *ngIf="booking.bookingStatus=='Pending'"
+              (click)="openConfirm('approve', booking.bookingID)">
+              Approve
+            </button>
+
+            <button class="complete-btn" *ngIf="booking.bookingStatus=='Confirmed'"
+              (click)="openConfirm('complete', booking.bookingID)">
+              Complete
+            </button>
+
+            <button class="cancel-btn" *ngIf="booking.bookingStatus!='Cancelled' &&
+                 booking.bookingStatus!='Completed'" (click)="openConfirm('cancel', booking.bookingID)">
+              Cancel
+            </button>
+
+            <button class="refund-btn" *ngIf="booking.bookingStatus=='Cancelled' &&
+         booking.refundStatus!='Refunded'" (click)="openConfirm('refund', booking.bookingID)">
+
+              Refund
+
+            </button>
+
+            <button class="delete-btn" (click)="deleteBooking(booking.bookingID)">
+              Delete
+            </button>
+
+          </td>
+
+        </tr>
+
+        <tr *ngIf="filteredBookings.length==0">
+
+          <td colspan="8">
+
+            <div class="empty-state">
+
+              <h2>No Bookings Found</h2>
+
+              <p>No bookings match your search.</p>
+
+            </div>
+
+          </td>
+
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+  <!-- ================= ANALYTICS ================= -->
+
+  <div class="analytics-grid">
+
+    <div class="chart-card">
+
+      <h2>Monthly Bookings</h2>
+
+      <div class="chart-box">
+
+        <canvas id="bookingChart"></canvas>
+
+      </div>
+
+    </div>
+
+    <div class="chart-card">
+
+      <h2>Booking Status</h2>
+
+      <div class="chart-box">
+
+        <canvas id="statusChart"></canvas>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- ================= BOOKING HISTORY ================= -->
+
+  <div class="history-card">
+
+    <div class="section-header">
+
+      <h2>Booking History</h2>
+
+    </div>
+
+    <div class="history-table-wrapper">
+
+      <table class="history-table">
+
+        <thead>
+
+          <tr>
+
+            <th>Booking ID</th>
+
+            <th>Vehicle</th>
+
+            <th>Status</th>
+
+            <th>Total Amount</th>
+
+          </tr>
+
+        </thead>
+
+        <tbody>
+
+          <tr *ngFor="let h of customerHistory">
+
+            <td>{{ h.bookingID }}</td>
+
+            <td>{{ h.vehicleNumber }}</td>
+
+            <td>
+
+              <span [ngClass]="{
+
+                'pending': h.bookingStatus=='Pending',
+
+                'confirmed': h.bookingStatus=='Confirmed',
+
+                'completed': h.bookingStatus=='Completed',
+
+                'cancelled': h.bookingStatus=='Cancelled'
+
+              }">
+
+                {{ h.bookingStatus }}
+
+              </span>
+
+            </td>
+
+            <td>
+
+              ₹{{ h.totalAmount }}
+
+            </td>
+
+          </tr>
+
+          <tr *ngIf="customerHistory.length==0">
+
+            <td colspan="4">
+
+              No booking history available.
+
+            </td>
+
+          </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+  <!-- ================= BOOKING DETAILS POPUP ================= -->
+
+  <div class="popup-overlay" *ngIf="showBookingPopup">
+
+    <div class="booking-popup">
+
+      <!-- Popup Header -->
+
+      <div class="popup-header">
+
+        <h2>Booking Details</h2>
+
+        <div class="popup-actions">
+
+          <button class="print-btn" id="printSection" (click)="printBooking()">
+
+            Print Receipt
+
+          </button>
+
+          <button class="close-icon" (click)="closePopup()">
+
+            ✕
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- Popup Body -->
+
+      <div class="popup-body">
+        <!-- ================= BOOKING DETAILS ================= -->
+
+        <div class="detail-card">
+
+          <h3>Booking Details</h3>
+
+          <div class="detail-row">
+
+            <span>Booking ID</span>
+
+            <b>{{selectedBooking.bookingID}}</b>
+
+          </div>
+
+          <div class="detail-row">
+
+            <span>Customer</span>
+
+            <b>{{selectedBooking.customerName}}</b>
+
+          </div>
+
+          <div class="detail-row">
+
+            <span>Vehicle</span>
+
+            <b>{{selectedBooking.vehicleNumber}}</b>
+
+          </div>
+
+          <div class="detail-row">
+
+            <span>Pickup Date</span>
+
+            <b>{{selectedBooking.startDate | date:'dd MMM yyyy'}}</b>
+
+          </div>
+
+          <div class="detail-row">
+
+            <span>Return Date</span>
+
+            <b>{{selectedBooking.endDate | date:'dd MMM yyyy'}}</b>
+
+          </div>
+
+          <div class="detail-row">
+
+            <span>Total Amount</span>
+
+            <b>₹{{selectedBooking.totalAmount}}</b>
+
+          </div>
+
+          <div class="detail-row">
+
+            <span>Status</span>
+
+            <span class="status-pill" [ngClass]="{
+
+        'pending': selectedBooking.bookingStatus=='Pending',
+
+        'confirmed': selectedBooking.bookingStatus=='Confirmed',
+
+        'completed': selectedBooking.bookingStatus=='Completed',
+
+        'cancelled': selectedBooking.bookingStatus=='Cancelled'
+
+      }">
+
+              {{selectedBooking.bookingStatus}}
+
+            </span>
+
+          </div>
+
+        </div>
+
+        <!-- ================= PAYMENT DETAILS ================= -->
+
+        <div class="detail-card">
+
+          <h3>Payment Details</h3>
+
+          <div class="payment-grid">
+
+            <div class="payment-card">
+
+              <label>Payment ID</label>
+
+              <p>{{paymentDetails.paymentID}}</p>
+
+            </div>
+
+            <div class="payment-card">
+
+              <label>Amount</label>
+
+              <p>₹{{paymentDetails.amount}}</p>
+
+            </div>
+
+            <div class="payment-card">
+
+              <label>Method</label>
+
+              <p>{{paymentDetails.paymentMethod}}</p>
+
+            </div>
+
+            <div class="payment-card">
+
+              <label>Status</label>
+
+              <span class="payment-status" [ngClass]="{
+
+          'paid': paymentDetails.paymentStatus=='Paid',
+
+          'unpaid': paymentDetails.paymentStatus!='Paid'
+
+        }">
+
+                {{paymentDetails.paymentStatus}}
+
+              </span>
+
+            </div>
+
+            <div class="payment-card">
+
+              <label>Payment Date</label>
+
+              <p>{{paymentDetails.paymentDate | date:'dd MMM yyyy'}}</p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ================= CUSTOMER INFORMATION ================= -->
+
+        <div class="detail-card">
+
+          <h3>Customer Information</h3>
+
+          <div class="customer-card">
+
+            <div class="customer-avatar">
+
+              {{customerDetails.name?.charAt(0)}}
+
+            </div>
+
+            <div class="customer-info">
+
+              <h4>{{customerDetails.name}}</h4>
+
+              <p>{{customerDetails.email}}</p>
+
+              <p>{{customerDetails.phone}}</p>
+
+              <p>{{customerDetails.address}}</p>
+
+              <p>
+
+                Driving License :
+                {{customerDetails.drivingLicense}}
+
+              </p>
+
+              <p>
+
+                Member Since :
+                {{customerDetails.createdAt | date:'dd MMM yyyy'}}
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+        <!-- ================= CAR INFORMATION ================= -->
+
+        <div class="detail-card">
+
+          <h3>Car Information</h3>
+
+          <div class="car-card">
+
+            <img [src]="carDetails.imageUrl" class="car-image" alt="Car">
+
+            <div class="car-info">
+
+              <h4>
+
+                {{carDetails.brand}}
+                {{carDetails.model}}
+
+              </h4>
+
+              <p>
+
+                <strong>Vehicle No :</strong>
+                {{carDetails.vehicleNumber}}
+
+              </p>
+
+              <p>
+
+                <strong>Fuel :</strong>
+                {{carDetails.fuelType}}
+
+              </p>
+
+              <p>
+
+                <strong>Transmission :</strong>
+                {{carDetails.transmission}}
+
+              </p>
+
+              <p>
+
+                <strong>Seats :</strong>
+                {{carDetails.seats}}
+
+              </p>
+
+              <p>
+
+                <strong>Rent / Day :</strong>
+
+                ₹{{carDetails.pricePerDay}}
+
+              </p>
+
+              <p>
+
+                <strong>Status :</strong>
+
+                <span class="car-status">
+
+                  {{carDetails.status}}
+
+                </span>
+
+              </p>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="detail-card">
+
+<h3>Booking Summary</h3>
+
+<div class="summary-card">
+
+<div class="summary-row">
+<span>Rental Amount</span>
+<span>₹{{summary?.totalAmount}}</span>
+</div>
+
+<div class="summary-row">
+<span>Damage Charge</span>
+<span>₹{{summary?.damageCharge}}</span>
+</div>
+
+<div class="summary-row">
+<span>Late Charge</span>
+<span>₹{{summary?.lateCharge}}</span>
+</div>
+
+<div class="summary-row">
+<span>Discount</span>
+<span>- ₹{{summary?.discountAmount}}</span>
+</div>
+
+<div class="summary-row">
+<span>Tax</span>
+<span>₹{{summary?.taxAmount}}</span>
+</div>
+
+<div class="summary-row">
+<span>Refund</span>
+<span>- ₹{{summary?.refundAmount}}</span>
+</div>
+
+<hr>
+
+<div class="summary-total">
+
+<span>Grand Total</span>
+
+<span>₹{{summary?.grandTotal}}</span>
+
+</div>
+
+<p>
+
+Rental Days :
+<strong>{{summary?.rentalDays}}</strong>
+
+</p>
+
+</div>
+
+</div>
+
+        <!-- ================= BOOKING TIMELINE ================= -->
+
+        <div class="detail-card">
+
+          <h3>Booking Timeline</h3>
+
+          <div class="timeline">
+
+            <div class="timeline-item" *ngFor="let t of timeline">
+
+              <div class="dot"></div>
+
+              <div class="content">
+
+                <h4>{{t.title}}</h4>
+
+                <p>{{t.description}}</p>
+
+                <small>
+
+                  {{t.createdAt | date:'dd MMM yyyy hh:mm a'}}
+
+                </small>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- ================= ADMIN NOTE ================= -->
+
+        <div class="detail-card">
+
+          <h3>Admin Note</h3>
+
+          <textarea class="note-box" [(ngModel)]="selectedBooking.adminNote" placeholder="Write note...">
+
+  </textarea>
+
+          <button class="save-note-btn" (click)="saveAdminNote()">
+
+            Save Note
+
+          </button>
+
+        </div>
+
+        <!-- ================= POPUP FOOTER ================= -->
+
+
+        <div class="popup-footer">
+
+          <button class="email-btn" (click)="sendEmail(selectedBooking.bookingID)">
+
+            Email Receipt
+
+          </button>
+
+          <button class="whatsapp-btn" (click)="sendWhatsApp()">
+
+            WhatsApp
+
+          </button>
+
+          <button class="download-btn" (click)="downloadInvoice(selectedBooking)">
+
+            Download Invoice
+
+          </button>
+
+          <button class="operations-btn" (click)="openOperationsPopup()">
+
+            Operations →
+
+          </button>
+
+
+          <button class="close-btn" (click)="closePopup()">
+
+            Close
+
+          </button>
+
+        </div>
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<!--=================================NEW POPUP==========================================-->
+
+
+
+<div class="popup-overlay" *ngIf="showOperationsPopup">
+
+  <div class="booking-popup operations-popup">
+
+    <!-- Header -->
+
+    <div class="popup-header">
+
+      <h2>Booking Operations</h2>
+
+      <button class="close-icon" (click)="closeOperationsPopup()">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <!-- Body -->
+
+    <div class="popup-body">
+
+      <!-- Timeline -->
+
+      <div class="operation-card">
+
+        <h3>Booking Timeline</h3>
+
+        <div class="timeline">
+
+          <div class="timeline-item" *ngFor="let t of timeline">
+
+            <div class="dot"></div>
+
+            <div class="content">
+
+              <h4>{{t.title}}</h4>
+
+              <p>{{t.description}}</p>
+
+              <small>
+
+                {{t.createdAt | date:'dd MMM yyyy hh:mm a'}}
+
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Admin Note -->
+
+      <div class="operation-card">
+
+        <h3>Admin Note</h3>
+
+        <textarea [(ngModel)]="selectedBooking.adminNote" class="note-box" placeholder="Write note...">
+
+        </textarea>
+
+        <button class="save-note-btn" (click)="saveAdminNote()">
+
+          Save Note
+
+        </button>
+
+      </div>
+
+      <!-- Action Buttons -->
+
+      <div class="operation-card">
+
+        <h3>Booking Operations</h3>
+
+        <div class="operation-grid">
+
+          <button class="operation-btn" (click)="openDriverPopup()">
+            Assign Driver
+
+          </button>
+
+          <button class="operation-btn" (click)="openExtendPopup()">
+
+            Extend Booking
+
+          </button>
+
+          <button class="operation-btn" (click)="openDamagePopup()">
+
+            Damage Charge
+
+          </button>
+
+          <button class="operation-btn" (click)="openLateChargePopup()">
+
+            Late Return Charge
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+
+    <div class="popup-footer">
+
+      <button class="back-btn" (click)="closeOperationsPopup()">
+
+        ← Back
+
+      </button>
+
+      <button class="close-btn" (click)="closePopup()">
+
+        Close
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- ================= BOOKING OPERATIONS POPUP ================= -->
+
+
+
+<!-- ================= DRIVER POPUP ================= -->
+
+<div class="popup-overlay" *ngIf="showDriverPopup">
+
+  <div class="small-popup">
+
+    <div class="popup-header">
+
+      <h2>Assign Driver</h2>
+
+      <button class="close-icon" (click)="showDriverPopup=false">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <div class="popup-body">
+
+      <label>Select Driver</label>
+
+      <select [(ngModel)]="selectedDriver" class="popup-input">
+
+        <option value="0">
+
+          Select Driver
+
+        </option>
+
+<option *ngFor="let d of drivers" [ngValue]="d.id">
+  {{ d.driverName }}
+</option>
+
+      </select>
+
+    </div>
+
+    <div class="popup-footer">
+
+      <button class="save-btn" (click)="assignDriver()">
+
+        Assign Driver
+
+      </button>
+
+      <button class="close-btn" (click)="showDriverPopup=false">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ================= DAMAGE CHARGE POPUP ================= -->
+
+<div class="popup-overlay" *ngIf="showDamagePopup">
+
+  <div class="small-popup">
+
+    <div class="popup-header">
+
+      <h2>Damage Charge</h2>
+
+      <button class="close-icon" (click)="showDamagePopup=false">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <div class="popup-body">
+
+      <label>Damage Amount</label>
+
+      <input type="number" class="popup-input" [(ngModel)]="damageAmount" placeholder="Enter damage amount">
+
+      <label>Remarks</label>
+
+      <textarea class="popup-input" rows="4" [(ngModel)]="damageRemarks" placeholder="Enter damage remarks">
+
+      </textarea>
+
+    </div>
+
+    <div class="popup-footer">
+
+      <button class="save-btn" (click)="saveDamageCharge()">
+
+        Save Damage
+
+      </button>
+
+      <button class="close-btn" (click)="showDamagePopup=false">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- ================= LATE RETURN CHARGE POPUP ================= -->
+
+<div class="popup-overlay" *ngIf="showLateChargePopup">
+
+  <div class="small-popup">
+
+    <div class="popup-header">
+
+      <h2>Late Return Charge</h2>
+
+      <button class="close-icon" (click)="showLateChargePopup=false">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <div class="popup-body">
+
+      <label>Actual Return Date</label>
+
+      <input type="date" class="popup-input" [(ngModel)]="actualReturnDate">
+
+      <button class="calculate-btn" (click)="calculateLateCharge()">
+
+        Calculate Charge
+
+      </button>
+
+      <div class="charge-summary">
+
+        <div class="summary-item">
+
+          <label>Late Days</label>
+
+          <p>{{lateDays}}</p>
+
+        </div>
+
+        <div class="summary-item">
+
+          <label>Charge / Day</label>
+
+          <p>₹{{chargePerDay}}</p>
+
+        </div>
+
+        <div class="summary-item">
+
+          <label>Total Charge</label>
+
+          <h3>₹{{totalLateCharge}}</h3>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="popup-footer">
+
+      <button class="save-btn" (click)="saveLateCharge()">
+
+        Save Charge
+
+      </button>
+
+      <button class="close-btn" (click)="showLateChargePopup=false">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ================= EXTEND BOOKING POPUP ================= -->
+
+<div class="popup-overlay" *ngIf="showExtendPopup">
+
+  <div class="small-popup">
+
+    <div class="popup-header">
+
+      <h2>Extend Booking</h2>
+
+      <button class="close-icon" (click)="closeExtendPopup()">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <div class="popup-body">
+
+      <div class="detail-row">
+
+        <span>Current Return Date</span>
+
+        <b>
+
+          {{selectedBooking.endDate | date:'dd MMM yyyy'}}
+
+        </b>
+
+      </div>
+
+      <label>New Return Date</label>
+
+      <input type="date" class="popup-input" [(ngModel)]="newReturnDate">
+
+      <div class="info-box">
+
+        <p>
+
+          The booking amount will be recalculated automatically based on the new return date.
+
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="popup-footer">
+
+      <button class="save-btn" (click)="extendBooking()">
+
+        Update Booking
+
+      </button>
+
+      <button class="close-btn" (click)="closeExtendPopup()">
+
+        Cancel
+
+      </button>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+
+<!-- ================= PAGINATION ================= -->
+
+<div class="pagination">
+
+  <button (click)="previousPage()" [disabled]="currentPage==1">
+
+    ◀ Previous
+
+  </button>
+
+  <span>
+
+    Page {{currentPage}} of {{totalPages}}
+
+  </span>
+
+  <button (click)="nextPage()" [disabled]="currentPage==totalPages">
+
+    Next ▶
+
+  </button>
+
+</div>
+
+<!-- ================= CONFIRM POPUP ================= -->
+
+<div class="popup-overlay" *ngIf="showConfirm">
+
+  <div class="confirm-popup">
+
+    <h2>{{confirmTitle}}</h2>
+
+    <p>{{confirmMessage}}</p>
+
+    <div class="popup-buttons">
+
+      <button class="popup-cancel" (click)="closeConfirmPopup()">
+
+        No
+
+      </button>
+
+      <button class="popup-confirm" (click)="confirmAction()">
+
+        Yes
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+ 
+
+<!-- ================= CONFIRM POPUP ================= -->
+
+<div class="popup-overlay" *ngIf="showConfirm">
+
+  <div class="confirm-popup">
+
+    <h2>{{confirmTitle}}</h2>
+
+    <p>{{confirmMessage}}</p>
+
+    <div class="popup-buttons">
+
+      <button class="popup-cancel" (click)="closeConfirmPopup()">
+
+        No
+
+      </button>
+
+      <button class="popup-confirm" (click)="confirmAction()">
+
+        Yes
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+<!-- TOAST -->
+
+<div class="custom-alert" *ngIf="showAlert">
+  <div class="alert-box">
+    <div class="alert-icon">✓</div>
+
+    <div class="alert-content">
+      <h3>Success</h3>
+      <p>{{ alertMessage }}</p>
+    </div>
+
+    <button class="alert-close" (click)="showAlert = false">
+      ✕
+    </button>
+  </div>
+</div>

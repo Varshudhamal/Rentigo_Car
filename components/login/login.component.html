@@ -1,0 +1,142 @@
+<div class="login-page">
+
+  <div class="login-container">
+
+    <!-- LEFT SIDE -->
+
+    <div class="login-left">
+
+      <span class="tag">
+        Welcome To Rentigo
+      </span>
+
+      <h1>
+        Drive Your
+        <span>Dream Car</span>
+      </h1>
+
+      <p>
+        Login to book premium luxury cars,
+        manage bookings and enjoy the best
+        rental experience.
+      </p>
+
+      <img
+        src="https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=1600"
+        alt="Luxury Car"
+      >
+
+    </div>
+
+    <!-- RIGHT SIDE -->
+
+    <div class="login-right">
+
+      <h2>Login Account</h2>
+
+      <form #loginForm="ngForm">
+
+        <!-- EMAIL -->
+
+        <div class="input-box">
+
+          <label>Email Address</label>
+
+          <input
+            type="email"
+            placeholder="Enter your email"
+            #email="ngModel"
+            name="email"
+            ngModel
+            required
+            pattern="[a-z0-9._%+-]+@gmail\.com$"
+          >
+
+          <small
+            class="error"
+            *ngIf="email.invalid && email.touched"
+          >
+            Enter valid Gmail address
+          </small>
+
+        </div>
+
+        <!-- PASSWORD -->
+
+        <div class="input-box">
+
+          <label>Password</label>
+
+          <input
+            type="password"
+            placeholder="Enter password"
+            #password="ngModel"
+            name="password"
+            ngModel
+            required
+            minlength="6"
+          >
+
+          <small
+            class="error"
+            *ngIf="password.invalid && password.touched"
+          >
+            Password must be minimum 6 characters
+          </small>
+
+        </div>
+
+        <!-- LOGIN BUTTON -->
+
+        <button
+          type="button"
+          (click)="login(email.value,password.value)"
+        >
+          Login
+        </button>
+
+        <!-- SUCCESS MESSAGE -->
+
+        <p class="success-toast">
+          {{successMessage}}
+        </p>
+
+      </form>
+
+      <!-- EXTRA OPTIONS -->
+
+      <div class="extra-options">
+
+        <label class="remember">
+
+          <input type="checkbox">
+
+          Remember Me
+
+        </label>
+
+        <a href="#">
+          Forgot Password?
+        </a>
+
+      </div>
+
+      
+        
+      </div>
+
+      <!-- REGISTER -->
+
+      <div class="register-link">
+
+        Don't have an account?
+
+        <a routerLink="/register">
+          Register
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>

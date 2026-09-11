@@ -1,0 +1,513 @@
+<div class="admin-cars-page">
+
+  <!-- TOP BAR -->
+
+  <div class="top-bar">
+
+    <div>
+      <h1>Cars Management</h1>
+      <p>Manage all luxury cars from dashboard</p>
+    </div>
+
+  <button
+  class="add-btn"
+  routerLink="/admin-add-car"
+>
+  + Add New Car
+</button>
+
+  </div>
+
+  <!-- STATS -->
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <h2>120</h2>
+      <p>Total Cars</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>85</h2>
+      <p>Available</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>35</h2>
+      <p>Booked</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>15</h2>
+      <p>Luxury Cars</p>
+    </div>
+
+  </div>
+
+  <!-- TABLE -->
+
+  <div class="table-section">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Car</th>
+          <th>Brand</th>
+          <th>Price</th>
+          <th>Location</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr>
+
+          <td class="car-info">
+
+            <img
+              src="https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1200"
+            >
+
+<span>{{bmwCar.name}}</span>
+          </td>
+
+<td>{{bmwCar.brand}}</td>
+<td>{{bmwCar.price}}</td>
+<td>{{bmwCar.location}}</td>
+          <td>
+            <span class="available">
+              Available
+            </span>
+          </td>
+
+          <td>
+
+           <button
+  class="edit-btn"
+  data-bs-toggle="modal"
+  data-bs-target="#editCarModal"
+
+(click)="openEditModal(bmwCar)">
+  <span class="material-symbols-outlined">
+Edit
+</span>
+</button>
+
+          <button
+  class="delete-btn"
+    onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+
+   <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+</td>
+
+        </tr>
+
+        <tr>
+
+          <td class="car-info">
+  <img  src="data:image/jpeg;base64,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"
+>
+  <span>{{fordCar.name}}</span>
+</td>
+
+<td>{{fordCar.brand}}</td>
+<td>{{fordCar.price}}</td>
+<td>{{fordCar.location}}</td>
+
+<td>
+  <span class="booked">
+    {{fordCar.status}}
+  </span>
+</td>
+
+<td>
+ <button
+    class="edit-btn"
+    data-bs-toggle="modal"
+    data-bs-target="#editCarModal"
+    (click)="openEditModal(fordCar)">
+
+    <span class="material-symbols-outlined">
+      edit
+    </span>
+
+  </button>
+
+  <button
+  class="delete-btn"
+  onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+  <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+</td>
+
+<tr>
+
+
+  <td class="car-info">
+    <img src="https://images.pexels.com/photos/210019/pexels-photo-210019.jpeg?auto=compress&cs=tinysrgb&w=1200">
+    
+
+ <span>{{mercedesCar.name}}</span>
+
+<td>{{mercedesCar.brand}}</td>
+<td>{{mercedesCar.price}}</td>
+<td>{{mercedesCar.location}}</td>
+
+<td>
+  <span class="available">{{mercedesCar.status}}</span>
+</td>
+  <td>
+     
+  <button
+    class="edit-btn"
+    data-bs-toggle="modal"
+    data-bs-target="#editCarModal"
+    (click)="openEditModal(mercedesCar)">
+
+    <span class="material-symbols-outlined">
+      edit
+    </span>
+
+  </button> 
+<button
+  class="delete-btn"
+  onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+  <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+  </td>
+
+</tr>
+
+<tr>
+
+  <td class="car-info">
+    <img src="https://images.pexels.com/photos/3752169/pexels-photo-3752169.jpeg?auto=compress&cs=tinysrgb&w=1200">
+    <span>{{lamboCar.name}}</span>
+
+<td>{{lamboCar.brand}}</td>
+<td>{{lamboCar.price}}</td>
+<td>{{lamboCar.location}}</td>
+
+<td>
+  <span class="booked">{{lamboCar.status}}</span>
+</td>
+ 
+
+  <td>
+    <button
+  class="edit-btn"
+  data-bs-toggle="modal"
+  data-bs-target="#editCarModal"
+  (click)="openEditModal(lamboCar)">
+
+  <span class="material-symbols-outlined">
+    edit
+  </span>
+
+</button>
+
+<button
+  class="delete-btn"
+  onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+  <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+  </td>
+
+</tr>
+
+<tr>
+
+  <td class="car-info">
+    <img src="https://images.pexels.com/photos/1149831/pexels-photo-1149831.jpeg?auto=compress&cs=tinysrgb&w=1200">
+  <span>{{teslaCar.name}}</span>
+
+<td>{{teslaCar.brand}}</td>
+<td>{{teslaCar.price}}</td>
+<td>{{teslaCar.location}}</td>
+
+<td>
+  <span class="available">{{teslaCar.status}}</span>
+</td>
+
+  <td>
+    
+<button
+  class="edit-btn"
+  data-bs-toggle="modal"
+  data-bs-target="#editCarModal"
+  (click)="openEditModal(teslaCar)">
+
+  <span class="material-symbols-outlined">
+    edit
+  </span>
+
+</button>
+
+<button
+  class="delete-btn"
+  onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+  <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+  </td>
+
+</tr>
+
+<tr>
+
+  <td class="car-info">
+    <img src="https://images.pexels.com/photos/3874337/pexels-photo-3874337.jpeg?auto=compress&cs=tinysrgb&w=1200">
+    <span>{{tharCar.name}}</span>
+
+<td>{{tharCar.brand}}</td>
+<td>{{tharCar.price}}</td>
+<td>{{tharCar.location}}</td>
+
+<td>
+  <span class="available">{{tharCar.status}}</span>
+</td>
+
+
+  <td>
+     <button
+  class="edit-btn"
+  data-bs-toggle="modal"
+  data-bs-target="#editCarModal"
+ (click)="openEditModal(tharCar)">
+  <span class="material-symbols-outlined">
+edit
+</span>
+</button>
+<button
+  class="delete-btn"
+  onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+  <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+  </td>
+
+</tr>
+
+<tr>
+
+  <td class="car-info">
+    <img src="https://images.pexels.com/photos/358070/pexels-photo-358070.jpeg?auto=compress&cs=tinysrgb&w=1200">
+   <span>{{audiCar.name}}</span>
+
+<td>{{audiCar.brand}}</td>
+<td>{{audiCar.price}}</td>
+<td>{{audiCar.location}}</td>
+
+<td>
+  <span class="available">{{audiCar.status}}</span>
+</td>
+
+  <td>
+    <button
+  class="edit-btn"
+  data-bs-toggle="modal"
+  data-bs-target="#editCarModal"
+  (click)="openEditModal(audiCar)">
+  <span class="material-symbols-outlined">
+edit
+</span>
+</button>
+<button
+  class="delete-btn"
+  onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+  <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+  </td>
+
+</tr>
+
+<tr>
+
+  <td class="car-info">
+    <img src="https://images.pexels.com/photos/100653/pexels-photo-100653.jpeg?auto=compress&cs=tinysrgb&w=1200">
+   <span>{{rangeRoverCar.name}}</span>
+
+<td>{{rangeRoverCar.brand}}</td>
+<td>{{rangeRoverCar.price}}</td>
+<td>{{rangeRoverCar.location}}</td>
+
+<td>
+  <span class="booked">{{rangeRoverCar.status}}</span>
+</td>
+  <td>
+    <button
+  class="edit-btn"
+  data-bs-toggle="modal"
+  data-bs-target="#editCarModal"
+  (click)="openEditModal(rangeRoverCar)">
+  <span class="material-symbols-outlined">
+edit
+</span>
+</button>
+<button
+  class="delete-btn"
+  onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+  <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+  </td>
+
+</tr>
+
+<tr>
+
+  <td class="car-info">
+    <img src="https://images.pexels.com/photos/193991/pexels-photo-193991.jpeg?auto=compress&cs=tinysrgb&w=1200">
+   <span>{{porscheCar.name}}</span>
+
+<td>{{porscheCar.brand}}</td>
+<td>{{porscheCar.price}}</td>
+<td>{{porscheCar.location}}</td>
+
+<td>
+  <span class="available">{{porscheCar.status}}</span>
+</td>
+
+  <td>
+    <button
+  class="edit-btn"
+  data-bs-toggle="modal"
+  data-bs-target="#editCarModal"
+  (click)="openEditModal(porscheCar)">
+  <span class="material-symbols-outlined">
+edit
+</span>
+</button>
+<button
+  class="delete-btn"
+  onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+  <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+  </td>
+
+</tr>
+
+<tr>
+
+  <td class="car-info">
+    <img src="https://images.pexels.com/photos/1007410/pexels-photo-1007410.jpeg?auto=compress&cs=tinysrgb&w=1200">
+  <span>{{ferrariCar.name}}</span>
+
+<td>{{ferrariCar.brand}}</td>
+<td>{{ferrariCar.price}}</td>
+<td>{{ferrariCar.location}}</td>
+
+<td>
+  <span class="booked">{{ferrariCar.status}}</span>
+</td>
+
+  <td>
+     <button
+  class="edit-btn"
+  data-bs-toggle="modal"
+  data-bs-target="#editCarModal"
+ (click)="openEditModal(ferrariCar)">
+  <span class="material-symbols-outlined">
+edit
+</span>
+</button>
+<button
+  class="delete-btn"
+  onclick="if(confirm('Are you sure you want to delete this car?')) { alert('Car deleted successfully'); this.closest('tr').remove(); }">
+  <span class="material-symbols-outlined">
+    delete
+  </span>
+</button>
+  </td>
+</tr>
+
+
+
+<!-- Paste Modal Here -->
+
+<div class="modal fade" id="editCarModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Car</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal">
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="mb-3">
+          <label>Car Name</label>
+          <input
+            class="form-control"
+            [(ngModel)]="selectedCar.name">
+        </div>
+
+        <div class="mb-3">
+          <label>Brand</label>
+          <input
+            class="form-control"
+            [(ngModel)]="selectedCar.brand">
+        </div>
+
+        <div class="mb-3">
+          <label>Price</label>
+          <input
+            class="form-control"
+            [(ngModel)]="selectedCar.price">
+        </div>
+
+        <div class="mb-3">
+          <label>Location</label>
+          <input
+            class="form-control"
+            [(ngModel)]="selectedCar.location">
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button
+          class="btn btn-secondary"
+          data-bs-dismiss="modal">
+          Cancel
+        </button>
+
+        <button
+          class="btn btn-success"
+          (click)="saveChanges()"
+          data-bs-dismiss="modal">
+          Save Changes
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+

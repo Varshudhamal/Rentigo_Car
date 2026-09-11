@@ -1,0 +1,229 @@
+<div class="admin-payments-page">
+
+  <!-- TOP BAR -->
+
+  <div class="top-bar">
+
+    <div>
+      <h1>Payments Management</h1>
+      <p>Track all Rentigo payment transactions</p>
+    </div>
+
+   <button
+  class="payment-btn"
+  (click)="generateReport()"
+>
+  + Generate Report
+</button>
+
+<p class="report-msg">
+  {{reportMessage}}
+</p>
+
+<a
+  *ngIf="reportLink"
+  [href]="reportLink"
+  download
+  class="download-btn"
+>
+  Download Payment Report
+</a>
+  </div>
+
+  <!-- STATS -->
+
+  <div class="stats-grid">
+
+    <div class="stat-card">
+      <h2>₹12.5L</h2>
+      <p>Total Revenue</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>₹8.2L</h2>
+      <p>This Month</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>185</h2>
+      <p>Successful Payments</p>
+    </div>
+
+    <div class="stat-card">
+      <h2>12</h2>
+      <p>Pending Payments</p>
+    </div>
+
+  </div>
+
+  <!-- TABLE -->
+
+  <div class="table-section">
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>Customer</th>
+          <th>Car</th>
+          <th>Amount</th>
+          <th>Payment Method</th>
+          <th>Date</th>
+          <th>Status</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        <tr>
+          <td>Sakshi Mule</td>
+          <td>BMW X5</td>
+          <td>₹15,000</td>
+          <td>UPI</td>
+          <td>28 May 2026</td>
+          <td>
+            <span class="success">
+              Paid
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Rahul Sharma</td>
+          <td>Audi A6</td>
+          <td>₹12,500</td>
+          <td>Card</td>
+          <td>27 May 2026</td>
+          <td>
+            <span class="pending">
+              Pending
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Priya Verma</td>
+          <td>Mustang</td>
+          <td>₹22,000</td>
+          <td>Net Banking</td>
+          <td>25 May 2026</td>
+          <td>
+            <span class="success">
+              Paid
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Aryan Patil</td>
+          <td>Porsche 911</td>
+          <td>₹35,000</td>
+          <td>Card</td>
+          <td>22 May 2026</td>
+          <td>
+            <span class="failed">
+              Failed
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+          <td>Neha Kapoor</td>
+          <td>Mercedes C-Class</td>
+          <td>₹18,000</td>
+          <td>UPI</td>
+          <td>21 May 2026</td>
+          <td>
+            <span class="success">
+              Paid
+            </span>
+          </td>
+        </tr>
+
+        <tr>
+  <td>Karan Mehta</td>
+  <td>Range Rover</td>
+  <td>₹28,000</td>
+  <td>UPI</td>
+  <td>20 May 2026</td>
+  <td>
+    <span class="success">
+      Paid
+    </span>
+  </td>
+</tr>
+
+<tr>
+  <td>Ananya Desai</td>
+  <td>Tesla Model S</td>
+  <td>₹19,500</td>
+  <td>Card</td>
+  <td>19 May 2026</td>
+  <td>
+    <span class="pending">
+      Pending
+    </span>
+  </td>
+</tr>
+
+<tr>
+  <td>Rohit Jain</td>
+  <td>Lamborghini Huracan</td>
+  <td>₹45,000</td>
+  <td>Net Banking</td>
+  <td>18 May 2026</td>
+  <td>
+    <span class="success">
+      Paid
+    </span>
+  </td>
+</tr>
+
+<tr>
+  <td>Pooja Singh</td>
+  <td>BMW X7</td>
+  <td>₹24,000</td>
+  <td>UPI</td>
+  <td>17 May 2026</td>
+  <td>
+    <span class="failed">
+      Failed
+    </span>
+  </td>
+</tr>
+
+<tr>
+  <td>Vikas Patil</td>
+  <td>Audi Q7</td>
+  <td>₹16,000</td>
+  <td>Card</td>
+  <td>16 May 2026</td>
+  <td>
+    <span class="success">
+      Paid
+    </span>
+  </td>
+</tr>
+
+<tr>
+  <td>Simran Kaur</td>
+  <td>Ferrari F8</td>
+  <td>₹55,000</td>
+  <td>UPI</td>
+  <td>15 May 2026</td>
+  <td>
+    <span class="pending">
+      Pending
+    </span>
+  </td>
+</tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
